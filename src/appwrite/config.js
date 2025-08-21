@@ -97,7 +97,7 @@ export class Service {
 
     // file upload services
 
-    async uploadFiles(file) {
+    async uploadFile(file) {
         try {
             return await this
                 .bucket.createFile(
@@ -106,7 +106,7 @@ export class Service {
                     file
                 )
         } catch (error) {
-            console.log("Appwrite service :: uploadFiles :: error", error);
+            console.log("Appwrite service :: uploadFile :: error", error);
         }
     }
 
