@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import authService from '../appwrite/auth';
-import { useNavigate, Link } from 'react-router-dom';
-import { login } from '../store/authSlice';
-import { Button, Input, Logo } from "./index"
-import { useDispatch } from 'react-redux';
-import { useForm } from 'react-hook-form';
 
+import React, {useState} from 'react'
+import authService from '../appwrite/auth'
+import {Link ,useNavigate} from 'react-router-dom'
+import {login} from '../store/authSlice'
+import {Button, Input, Logo} from './index.js'
+import {useDispatch} from 'react-redux'
+import {useForm} from 'react-hook-form'
 
 function Signup() {
     const navigate = useNavigate()
     const [error, setError] = useState("")
     const dispatch = useDispatch()
-    const { register, handleSubmit } = useForm()
+    const {register, handleSubmit} = useForm()
 
-    const create = async (data) => {
+    const create = async(data) => {
         setError("")
         try {
-            const userData = authService.createAccount(data)
+            const userData = await authService.createAccount(data)
             if (userData) {
-                const userData = authService.getCurrentUser()
-                if (userData) dispatch(login(userData));
+                const userData = await authService.getCurrentUser()
+                if(userData) dispatch(login(userData));
                 navigate("/")
             }
         } catch (error) {
@@ -27,10 +27,10 @@ function Signup() {
         }
     }
 
-    return (
-        <div className='flex items-center justify-center'>
+  return (
+    <div className="flex items-center justify-center">
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 flex justify-center">
+            <div className="mb-2 flex justify-center">
                     <span className="inline-block w-full max-w-[100px]">
                         <Logo width="100%" />
                     </span>
@@ -45,45 +45,45 @@ function Signup() {
                         Sign In
                     </Link>
                 </p>
-                {error && <p className='text-red-600 mt-8
-                 text-center'>{error}</p>}
+                {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
                         <Input
-                            label="Full Name :"
-                            placeholder="Enter your name"
-                            {...register("name", {
-                                required: true,
-                            })}
-                        />
-                        <input
-                            label="email: "
-                            placeholder="Enter your email"
-                            type="email"
-                            {...register("email", {
-                                required: true,
-                                validate: {
-                                    matchPattern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                        "Email address must be a valid address",
-                                }
-                            })}
+                        label="Full Name: "
+                        placeholder="Enter your full name"
+                        {...register("name", {
+                            required: true,
+                        })}
                         />
                         <Input
-                        label="Password :"
-                        type="password"
-                        placeholder="Enter yout password"
-                        {...register("password", {
-                            required:true,})}
+                        label="Email: "
+                        placeholder="Enter your email"
+                        type="email"
+                        {...register("email", {
+                            required: true,
+                            validate: {
+                                matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                                "Email address must be a valid address",
+                            }
+                        })}
                         />
-                        <Button
-                        type="submit"
-                        className="w-full"
-                        >Create Account</Button>
+                        <Input
+                        label="Password: "
+                        type="password"
+                        placeholder="Enter your password"
+                        {...register("password", {
+                            required: true,})}
+                        />
+                        <Button type="submit" className="w-full">
+                            Create Account
+                        </Button>
                     </div>
                 </form>
             </div>
-        </div>
-    );
+
+    </div>
+  )
 }
 
-export default Signup;
+export default Signup
